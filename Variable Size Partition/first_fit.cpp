@@ -20,7 +20,7 @@ int main()
             }
         }
         if (chosen != -1)
-            block[chosen] -= process[i]; // block shrinks
+            block[chosen] -= process[i];
         cout << "Process " << i + 1 << " -> Block " << (chosen == -1 ? -1 : chosen + 1) << "\n";
     }
 
