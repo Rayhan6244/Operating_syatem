@@ -3,60 +3,52 @@ using namespace std;
 
 int main()
 {
-    int n = 5, m = 3; // 5 processes, 3 resources
-
-    int alloc[5][3] = {
-        {0, 1, 0}, {2, 0, 0}, {3, 0, 2}, {2, 1, 1}, {0, 0, 2}};
-    int maxm[5][3] = {
-        {7, 5, 3}, {3, 2, 2}, {9, 0, 2}, {2, 2, 2}, {4, 3, 3}};
+    int alloc[5][3] = {{0, 1, 0}, {2, 0, 0}, {3, 0, 2}, {2, 1, 1}, {0, 0, 2}};
+    int maxm[5][3] = {{7, 5, 3}, {3, 2, 2}, {9, 0, 2}, {2, 2, 2}, {4, 3, 3}};
     int avail[3] = {3, 3, 2};
 
     int need[5][3];
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < m; j++)
+    for (int i = 0; i < 5; i++)
+        for (int j = 0; j < 3; j++)
             need[i][j] = maxm[i][j] - alloc[i][j];
 
-    bool finish[5] = {false};
-    int work[3];
-    for (int j = 0; j < m; j++)
-        work[j] = avail[j];
+    int finish[5] = {0, 0, 0, 0, 0};
+    int work[3] = {avail[0], avail[1], avail[2]};
+    int safe[5], count = 0;
 
-    int safeSeq[5], count = 0;
-
-    while (count < n)
+    while (count < 5)
     {
-        bool found = false;
-        for (int i = 0; i < n; i++)
+        int found = 0;
+        for (int i = 0; i < 5; i++)
         {
-            if (!finish[i])
+            if (finish[i] == 0)
             {
-                bool canRun = true;
-                for (int j = 0; j < m; j++)
-                    if (need[i][j] > work[j])
-                    {
-                        canRun = false;
-                        break;
-                    }
-
-                if (canRun)
+                int canRun = 1;
+                for (int j = 0; j < 3; j++)
                 {
-                    for (int j = 0; j < m; j++)
-                        work[j] += alloc[i][j];
-                    safeSeq[count++] = i;
-                    finish[i] = true;
-                    found = true;
+                    if (need[i][j] > work[j])
+                        canRun = 0;
+                }
+                if (canRun == 1)
+                {
+                    for (int j = 0; j < 3; j++)
+                        work[j] = work[j] + alloc[i][j];
+                    safe[count] = i;
+                    count++;
+                    finish[i] = 1;
+                    found = 1;
                 }
             }
         }
-        if (!found)
+        if (found == 0)
             break;
     }
 
-    if (count == n)
+    if (count == 5)
     {
         cout << "System is in SAFE state.\nSafe Sequence: ";
-        for (int i = 0; i < n; i++)
-            cout << "P" << safeSeq[i] << " ";
+        for (int i = 0; i < 5; i++)
+            cout << "P" << safe[i] << " ";
         cout << "\n";
     }
     else
