@@ -3,26 +3,25 @@ using namespace std;
 
 int main()
 {
-    int block[] = {100, 500, 200, 300, 600};
-    int process[] = {212, 417, 112, 426};
-    int nb = 5, np = 4;
-    bool used[10] = {false};
+    int block[5] = {100, 500, 200, 300, 600};
+    int process[4] = {212, 417, 112, 426};
 
-    cout << "First Fit Fixed Partition:\n";
-    for (int i = 0; i < np; i++)
+    cout << "First Fit:\n";
+    for (int i = 0; i < 4; i++)
     {
-        int chosen = -1;
-        for (int j = 0; j < nb; j++)
+        int flag = 0;
+        for (int j = 0; j < 5; j++)
         {
-            if (!used[j] && block[j] >= process[i])
+            if (block[j] >= process[i])
             {
-                chosen = j;
+                cout << "Process " << i + 1 << " -> Block " << j + 1 << "\n";
+                block[j] = 0;
+                flag = 1;
                 break;
             }
         }
-        if (chosen != -1)
-            used[chosen] = true;
-        cout << "Process " << i + 1 << " -> Block " << (chosen == -1 ? -1 : chosen + 1) << "\n";
+        if (flag == 0)
+            cout << "Process " << i + 1 << " -> Not Allocated\n";
     }
     return 0;
 }
